@@ -1,0 +1,42 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:elevation="4dp"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <ImageButton
+        android:id="@+id/icon_menu"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="Ícone Menu"
+        android:scaleType="fitCenter"
+        android:src="@drawable/menu" />
+
+    <TextView
+        android:id="@+id/text_activity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:text=""
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <ImageButton
+        android:id="@+id/icon_notificacao"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="Ícone Notificação"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_notificacao" />
+</LinearLayout>
+
+
+

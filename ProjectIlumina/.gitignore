@@ -1,0 +1,35 @@
+# Arquivos de configuração do Android Studio
+*.iml
+/.idea/
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+# Ignorar arquivos de build e cache do Android Studio
+/build/
+app/build/
+.gradle/
+.idea/
+
+
+# Arquivos do sistema operacional
+.DS_Store
+
+# Diretórios de build
+/build/
+/.gradle/
+/captures/
+/externalNativeBuild/
+.cxx/
+
+# Arquivos de configuração local
+/local.properties
+
+# Arquivos sensíveis
+app/src/main/res/raw/service_account.json
+app/google-services.json
+
+
+

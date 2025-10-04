@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:gravity="center_vertical">
+    <include
+        layout="@layout/app_bar_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:elevation="4dp"
+        android:background="@color/white"
+        android:id="@+id/app_bar_default"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginRight="6dp"
+        android:layout_marginLeft="6dp"
+        android:orientation="vertical"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Digite a Cidade onde a manutenção é necessária:"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_cidade"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite a Cidade:" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Digite o bairro onde a manutenção é necessária:"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/edt_bairro"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite o bairro:" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Informe qual tipo de manutenção você está solicitando:"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edt_tipo_manutencao"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Tipo de Manutenção:" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Digite mais sobre o ocorrido:"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edt_descricao"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Descrição:" />
+
+        <Button
+            android:id="@+id/btnSelecionarImagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:textColor="@color/cinza"
+            android:text="Adicionar Imagem" />
+
+        <Button
+            android:id="@+id/btn_concluir"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_rectangle_green"
+            android:text="Concluir"
+            android:textColor="@color/cinza" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/end_bar"
+        android:id="@+id/end_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:background="@drawable/recylcer_button_navigation"
+        android:layout_alignParentBottom="true"/>
+
+</LinearLayout>

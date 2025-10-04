@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/icon_logo"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acesse"
+        android:textColor="@color/cinza"
+        android:textSize="24sp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Digite seu email e senha para entrar"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="370dp"
+        android:layout_height="20dp"
+        android:text="Digite seu email"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_rectangle_yellow"
+        android:hint=" Email" />
+
+    <TextView
+        android:layout_width="370dp"
+        android:layout_height="20dp"
+        android:text="Digite sua senha"
+        android:layout_marginTop="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/rounded_rectangle_yellow">
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:hint="Senha"
+            android:inputType="textPassword"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:paddingEnd="8dp" />
+
+        <ImageView
+            android:id="@+id/passwordToggle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_visibility_off"
+            android:contentDescription="@string/toggle_password_visibility"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_rectangle_yellow"
+        android:textColor="@color/white"
+        android:text="Acessar" />
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_rectangle_yellow"
+        android:textColor="@color/white"
+        android:text="Cadastrar" />
+
+
+</LinearLayout>
+
+
+

@@ -1,0 +1,85 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/recycler_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Linha para Data -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data:"
+                android:textStyle="bold"
+                android:paddingEnd="4dp" />
+
+            <TextView
+                android:id="@+id/data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data Aqui" />
+        </LinearLayout>
+
+        <!-- Linha para Tipo de Manutenção -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de Manutenção:"
+                android:textStyle="bold"
+                android:paddingEnd="4dp" />
+
+            <TextView
+                android:id="@+id/tvTipoManutencao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo Aqui" />
+        </LinearLayout>
+
+        <!-- Linha para Descrição -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição:"
+                android:textStyle="bold"
+                android:paddingEnd="4dp" />
+
+            <TextView
+                android:id="@+id/tvDescricao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descrição Aqui" />
+        </LinearLayout>
+
+        <!-- Botão Finalizar -->
+        <Button
+            android:id="@+id/btn_finalizarDenuncia"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_rectangle_red"
+            android:text="Finalizar"
+            android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+</FrameLayout>

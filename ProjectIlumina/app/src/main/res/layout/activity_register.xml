@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="135dp"
+            android:src="@drawable/icon_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Cadastre-se"
+            android:textColor="@color/cinza"
+            android:textSize="32sp" />
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="6dp"
+            android:text="Email" />
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite seu email" />
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="Nome" />
+
+        <EditText
+            android:id="@+id/editTextNome"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite seu Nome" />
+
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="CPF" />
+
+        <EditText
+            android:id="@+id/editTextCpf"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite seu CPF" />
+
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="Telefone" />
+
+        <EditText
+            android:id="@+id/editTextTelefone"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite seu Telefone" />
+
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="Rua" />
+
+        <EditText
+            android:id="@+id/editTextRua"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite sua Rua" />
+
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="Bairro" />
+
+        <EditText
+            android:id="@+id/editTextBairro"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite seu Bairro" />
+
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="Senha" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite sua senha"
+            android:inputType="textPassword" />
+
+
+        <TextView
+            android:layout_width="370dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="7dp"
+            android:text="Confirme a Senha" />
+
+        <EditText
+            android:id="@+id/editTextConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Confirme sua senha"
+            android:inputType="textPassword" />
+
+
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:text="Cadastrar"
+            android:textColor="@color/white" />
+
+
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:text="Já tem uma conta? Faça Login"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</ScrollView>
