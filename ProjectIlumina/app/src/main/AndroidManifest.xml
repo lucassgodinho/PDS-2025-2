@@ -25,6 +25,9 @@
         <activity
             android:name=".Activity.SendReportActivity"
             android:exported="false" />
+        <activity android:name=".Activity.FeedActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".Activity.HomeActivity"
             android:exported="false" />

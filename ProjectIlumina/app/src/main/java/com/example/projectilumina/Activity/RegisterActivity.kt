@@ -28,14 +28,11 @@ class RegisterActivity : AppCompatActivity() {
             val password: String = binding?.editTextPassword?.text.toString()
             val confirmpassword: String = binding?.editTextConfirmPassword?.text.toString()
             val nome: String = binding?.editTextNome?.text.toString()
-            val cpf: String = binding?.editTextCpf?.text.toString()
-            val telefone: String = binding?.editTextTelefone?.text.toString()
-            val rua: String = binding?.editTextRua?.text.toString()
-            val bairro: String = binding?.editTextBairro?.text.toString()
+            val cidade: String = binding?.editTextCidade?.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty() && confirmpassword.isNotEmpty() && nome.isNotEmpty() && cpf.isNotEmpty() && telefone.isNotEmpty()) {
+            if (email.isNotEmpty() && password.isNotEmpty() && confirmpassword.isNotEmpty() && nome.isNotEmpty() && cidade.isNotEmpty()) {
                 if (password == confirmpassword) {
-                    createUserWithEmailAndPassword(email, password, nome, cpf, telefone, rua, bairro)
+                    createUserWithEmailAndPassword(email, password, nome, cidade)
                 } else {
                     Toast.makeText(this@RegisterActivity, "Senhas incompatíveis.", Toast.LENGTH_SHORT).show()
                 }
@@ -54,12 +51,9 @@ class RegisterActivity : AppCompatActivity() {
         email: String,
         password: String,
         nome: String,
-        cpf: String,
-        telefone: String,
-        rua: String,
-        bairro: String
+        cidade: String,
     ) {
-        if (email.isEmpty() || password.isEmpty() || nome.isEmpty() || cpf.isEmpty() || telefone.isEmpty() || rua.isEmpty() || bairro.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty() || nome.isEmpty() || cidade.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -74,7 +68,7 @@ class RegisterActivity : AppCompatActivity() {
                     val database = FirebaseDatabase.getInstance().getReference("users")
                     val latitude = 0.0
                     val longitude = 0.0
-                    val userObj = User(userId, nome, email, cpf, telefone, rua, bairro, latitude, longitude)
+                    val userObj = User(userId, nome, email, cidade, latitude, longitude)
 
 
                     database.child(userId).setValue(userObj).addOnCompleteListener { saveTask ->

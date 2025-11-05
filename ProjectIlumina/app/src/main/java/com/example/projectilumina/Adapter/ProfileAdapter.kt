@@ -13,10 +13,7 @@ class ProfileAdapter(private val perfilList: List<User>) : RecyclerView.Adapter<
     class PerfilViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nome: TextView = itemView.findViewById(R.id.textNome)
         val email: TextView = itemView.findViewById(R.id.textEmail)
-        val cpf: TextView = itemView.findViewById(R.id.textCpf)
-        val telefone: TextView = itemView.findViewById(R.id.textTelefone)
-        val rua: TextView = itemView.findViewById(R.id.textRua)
-        val bairro: TextView = itemView.findViewById(R.id.textBairro)
+        val cidade: TextView = itemView.findViewById(R.id.textCidade)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PerfilViewHolder {
@@ -28,10 +25,8 @@ class ProfileAdapter(private val perfilList: List<User>) : RecyclerView.Adapter<
         val perfil = perfilList[position]
         holder.nome.text = "Nome: ${perfil.nome}"
         holder.email.text = "Email: ${perfil.email}"
-        holder.cpf.text = "CPF: ${perfil.cpf}"
-        holder.telefone.text = "Telefone: ${perfil.telefone}"
-        holder.rua.text = "Rua: ${perfil.rua}"
-        holder.bairro.text = "Bairro: ${perfil.bairro}"
+        holder.cidade.text = "Cidade: ${perfil.cidade}"
+
 
     }
 

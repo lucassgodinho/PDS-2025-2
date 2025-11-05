@@ -24,13 +24,11 @@ class NotificacaoAdapter(private val notificacoes: List<Notificacao>) :
     override fun getItemCount() = notificacoes.size
 
     class NotificacaoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val idChamadoTextView: TextView = itemView.findViewById(R.id.id_chamado)
         private val dataTextView: TextView = itemView.findViewById(R.id.data)
         private val tipoManutencaoTextView: TextView = itemView.findViewById(R.id.tvTipoManutencao)
         private val descricaoTextView: TextView = itemView.findViewById(R.id.tvDescricao)
 
         fun bind(notificacao: Notificacao) {
-            idChamadoTextView.text = "Id: ${notificacao.denunciaId}"
             dataTextView.text ="Data: ${notificacao.data}"
             tipoManutencaoTextView.text ="Tipo da Manutenção: ${notificacao.tipoManutencao}"
             descricaoTextView.text = "Descrição: ${notificacao.descricao}"

@@ -2,29 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
     <include
+        android:id="@+id/app_bar_default"
         layout="@layout/app_bar_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:elevation="4dp"
         android:background="@color/white"
-        android:id="@+id/app_bar_default"/>
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:padding="16dp" />
 
-
-
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginRight="6dp"
         android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:paddingTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Digite a rua e o Número:"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_rua"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Rua e N°:"
+            android:textColorHint="@color/edittext"
+            android:paddingStart="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,81 +53,125 @@
         <EditText
             android:id="@+id/edt_cidade"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Digite a Cidade:" />
+            android:hint="Cidade:"
+            android:textColorHint="@color/edittext"
+            android:paddingStart="20dp"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Digite o bairro onde a manutenção é necessária:"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/edt_bairro"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Digite o bairro:" />
+            android:hint="Bairro:"
+            android:textColorHint="@color/edittext"
+            android:paddingStart="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Informe qual tipo de manutenção você está solicitando:"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:text="Informe qual problema ocorreu:"
+            android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/edt_tipo_manutencao"
+            android:id="@+id/edt_problema"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="65dp"
             android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Tipo de Manutenção:" />
+            android:hint="Problema:"
+            android:textColorHint="@color/edittext"
+            android:paddingStart="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Digite mais sobre o ocorrido:"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:text="Digite mais sobre o assunto:"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/edt_descricao"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="70dp"
             android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Descrição:" />
+            android:hint="Descrição:"
+            android:textColorHint="@color/edittext"
+            android:paddingStart="20dp"/>
 
         <Button
             android:id="@+id/btnSelecionarImagem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/rounded_rectangle_yellow"
-            android:textColor="@color/cinza"
-            android:text="Adicionar Imagem" />
+            android:text="Adicionar Fotos "
+            android:textSize="20dp"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deseja enviar email para a prefeitura?"
+            android:textSize="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            />
+
+        <LinearLayout
+            android:id="@+id/checklist_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <CheckBox
+                android:id="@+id/check_torres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Torres"/>
+
+            <CheckBox
+                android:id="@+id/check_capao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capão da Canoa"/>
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/btn_concluir"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_rectangle_green"
+            android:background="@color/green"
             android:text="Concluir"
-            android:textColor="@color/cinza" />
+            android:textColor="@color/white"
+            android:textAllCaps="false"/>
     </LinearLayout>
+</ScrollView>
 
     <include
-        layout="@layout/end_bar"
         android:id="@+id/end_bar"
+        layout="@layout/end_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:elevation="4dp"
-        android:padding="8dp"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/recylcer_button_navigation"
-        android:layout_alignParentBottom="true"/>
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:padding="8dp" />
 
 </LinearLayout>

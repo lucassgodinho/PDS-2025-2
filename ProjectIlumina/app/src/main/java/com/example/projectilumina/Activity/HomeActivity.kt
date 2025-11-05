@@ -106,14 +106,18 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
             val intent = Intent(this, ReportActivity::class.java)
             startActivity(intent)
         }
+        binding.endBar.iconFeed.setOnClickListener{
+            val intent = Intent(this, FeedActivity::class.java)
+            startActivity(intent)
+        }
     }
     private fun updateIconColors(isMapaActivity: Boolean) {
 
         if (isMapaActivity) {
-            binding.endBar.iconHome.setColorFilter(ContextCompat.getColor(this, R.color.white))
+            binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.white))
             binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.black))
         } else {
-            binding.endBar.iconHome.setColorFilter(ContextCompat.getColor(this, R.color.black))
+            binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.black))
             binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.black))
         }
     }

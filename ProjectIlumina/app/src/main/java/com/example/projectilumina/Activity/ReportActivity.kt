@@ -11,6 +11,7 @@ import com.example.projectilumina.Adapter.DenunciaAdapter
 import com.example.projectilumina.R
 import com.example.projectilumina.Utils.NotificationUtils
 import com.example.projectilumina.data.Denuncia
+import com.example.projectilumina.databinding.ActivityProfileBinding
 import com.example.projectilumina.databinding.ActivityReportBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -65,28 +66,33 @@ class ReportActivity : AppCompatActivity() {
         NotificationUtils.atualizarIconeNotificacao(binding.appBarDefault.iconNotificacao)
     }
     private fun setupNavigationButtons() {
-        binding.appBarDefault.textActivity.text = "Acompanhamento de Chamado"
+        binding.appBarDefault.textActivity.text = "Minhas denuncias"
         binding.appBarDefault.iconNotificacao.setOnClickListener {
             val intent = Intent(this, NotificacaoActivity::class.java)
             startActivity(intent)
         }
 
-        binding.appBarDefault.iconReturn.setOnClickListener {
-            finish()
+        binding.appBarDefault.iconMenu.setOnClickListener {
+            val intent = Intent(this, ActivityProfileBinding::class.java)
+            startActivity(intent)
         }
-        binding.endBar.iconHome.setOnClickListener {
+        binding.endBar.iconMapa.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+        binding.endBar.iconFeed.setOnClickListener{
+            val intent = Intent(this, FeedActivity::class.java)
             startActivity(intent)
         }
     }
     private fun updateIconColors(isMapaActivity: Boolean) {
         if (isMapaActivity) {
 
-            binding.endBar.iconHome.setColorFilter(ContextCompat.getColor(this, R.color.black))
+            binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.black))
             binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.white))
         } else {
 
-            binding.endBar.iconHome.setColorFilter(ContextCompat.getColor(this, R.color.black))
+            binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.black))
             binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.black))
         }
     }

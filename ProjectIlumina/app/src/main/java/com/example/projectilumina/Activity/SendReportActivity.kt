@@ -95,8 +95,12 @@ class SendReportActivity : AppCompatActivity() {
             val intent = Intent(this, ReportActivity::class.java)
             startActivity(intent)
         }
-        binding.endBar.iconHome.setOnClickListener {
+        binding.endBar.iconMapa.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+        binding.endBar.iconFeed.setOnClickListener{
+            val intent = Intent(this, FeedActivity::class.java)
             startActivity(intent)
         }
         binding.btnSelecionarImagem.setOnClickListener {
@@ -146,14 +150,15 @@ class SendReportActivity : AppCompatActivity() {
     }
 
     private fun enviarDenuncia() {
-        val tipoManutencao = binding.edtTipoManutencao.text.toString().trim()
+        val problema = binding.edtProblema.text.toString().trim()
         val currentDate =
             SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date())
         val descricao = binding.edtDescricao.text.toString().trim()
+        val rua = binding.edtRua.text.toString().trim()
         val bairro = binding.edtBairro.text.toString().trim()
         val cidade = binding.edtCidade.text.toString().trim()
 
-        if (tipoManutencao.isEmpty() || descricao.isEmpty()) {
+        if (problema.isEmpty() || descricao.isEmpty()) {
             Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             binding.btnConcluir.isEnabled = true
             return
@@ -187,8 +192,9 @@ class SendReportActivity : AppCompatActivity() {
                 val denuncia = Denuncia(
                     id = "",
                     cidade = cidade,
+                    rua = rua,
                     bairro = bairro,
-                    tipoManutencao = tipoManutencao,
+                    problema = problema,
                     dataHora = currentDate,
                     descricao = descricao,
                     latitude = latitude,
@@ -224,7 +230,7 @@ class SendReportActivity : AppCompatActivity() {
                     denuncia.latitude,
                     denuncia.longitude,
                     denuncia.dataHora,
-                    denuncia.tipoManutencao,
+                    denuncia.problema,
                     denuncia.descricao,
                     denuncia.userId
                 )

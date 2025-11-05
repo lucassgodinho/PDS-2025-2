@@ -9,7 +9,6 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <!-- Linha para Data -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +28,7 @@
                 android:text="Data Aqui" />
         </LinearLayout>
 
-        <!-- Linha para Tipo de Manutenção -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +48,7 @@
                 android:text="Tipo Aqui" />
         </LinearLayout>
 
-        <!-- Linha para Descrição -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +68,6 @@
                 android:text="Descrição Aqui" />
         </LinearLayout>
 
-        <!-- Botão Finalizar -->
         <Button
             android:id="@+id/btn_finalizarDenuncia"
             android:layout_width="200dp"

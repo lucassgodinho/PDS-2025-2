@@ -70,8 +70,12 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, ReportActivity::class.java)
             startActivity(intent)
         }
-        binding.endBar.iconHome.setOnClickListener {
+        binding.endBar.iconMapa.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+        binding.endBar.iconFeed.setOnClickListener{
+            val intent = Intent(this, FeedActivity::class.java)
             startActivity(intent)
         }
     }

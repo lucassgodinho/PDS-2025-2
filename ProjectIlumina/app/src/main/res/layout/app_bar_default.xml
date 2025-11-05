@@ -8,12 +8,11 @@
 
     <ImageButton
         android:id="@+id/icon_return"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="59dp"
+        android:layout_height="45dp"
         android:background="?attr/selectableItemBackground"
-        android:contentDescription="Ícone Retorno"
         android:scaleType="fitCenter"
-        android:src="@drawable/icon_return" />
+        android:src="@drawable/icon_retornar" />
 
     <TextView
         android:id="@+id/text_activity"
@@ -31,9 +30,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="?attr/selectableItemBackground"
-        android:contentDescription="Ícone Notificação"
         android:scaleType="fitCenter"
-        android:src="@drawable/icon_notificacao" />
+        android:src="@drawable/icon_notification" />
 </LinearLayout>
 
 

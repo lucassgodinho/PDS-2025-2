@@ -9,13 +9,13 @@
 
     <ImageButton
         android:id="@+id/icon_menu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackground"
         android:contentDescription="Ícone Menu"
         android:scaleType="fitCenter"
-        android:src="@drawable/menu" />
+        android:src="@drawable/icon_perfil" />
 
     <TextView
         android:id="@+id/text_activity"
@@ -30,12 +30,12 @@
 
     <ImageButton
         android:id="@+id/icon_notificacao"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:background="?attr/selectableItemBackground"
         android:contentDescription="Ícone Notificação"
         android:scaleType="fitCenter"
-        android:src="@drawable/icon_notificacao" />
+        android:src="@drawable/icon_notification" />
 </LinearLayout>
 
 

@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_rectangle_yellow"
+    android:background="@color/white"
     android:orientation="horizontal"
     android:elevation="4dp"
     android:padding="8dp">
@@ -15,9 +15,33 @@
         android:gravity="center">
 
         <ImageButton
-            android:id="@+id/icon_home"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/icon_feed"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Ícone Home"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_feed" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Feed"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:backgroundTint="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/icon_mapa"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="Ícone Home"
             android:scaleType="fitCenter"
@@ -27,7 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mapa"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
     <LinearLayout
@@ -39,18 +64,19 @@
 
         <ImageButton
             android:id="@+id/icon_denuncia"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="Ícone Denúncia"
             android:scaleType="fitCenter"
-            android:src="@drawable/report" />
+            android:src="@drawable/icon_denuncias" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Denúncias"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/black"/>
     </LinearLayout>
 </LinearLayout>
 
