@@ -6,9 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -42,6 +47,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var databaseReference: DatabaseReference
     private lateinit var notificationIcon: ImageButton
     private val REQUEST_NOTIFICATION_PERMISSION = 1234
+    private var userLatLng: LatLng? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -110,11 +116,83 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
             val intent = Intent(this, FeedActivity::class.java)
             startActivity(intent)
         }
+        val btnFiltrar = findViewById<Button>(R.id.btnFilter)
+        btnFiltrar.setOnClickListener {
+            abrirFiltro()
+        }
+
     }
+    private var filtroAtual: String? = null
+
+    private fun abrirFiltro() {
+        val dialog = android.app.Dialog(this)
+        dialog.setContentView(R.layout.item_filter)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val width = (resources.displayMetrics.widthPixels * 0.8).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setGravity(android.view.Gravity.CENTER)
+        dialog.setCanceledOnTouchOutside(true)
+
+        val finalizados = dialog.findViewById<Button>(R.id.button_finalizados)
+        val pendentes   = dialog.findViewById<Button>(R.id.button_pendentes)
+
+
+        finalizados.setOnClickListener {
+            if (filtroAtual == "finalizado") {
+                carregarDenuncias()
+                filtroAtual = null
+                Toast.makeText(this, "Exibindo todas as denúncias", Toast.LENGTH_SHORT).show()
+            } else {
+                carregarDenunciasFiltradas("finalizado")
+                filtroAtual = "finalizado"
+                Toast.makeText(this, "Exibindo denúncias finalizadas", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        pendentes.setOnClickListener {
+            if (filtroAtual == "pendente") {
+                carregarDenuncias()
+                filtroAtual = null
+                Toast.makeText(this, "Exibindo todas as denúncias", Toast.LENGTH_SHORT).show()
+            } else {
+                carregarDenunciasFiltradas("pendente")
+                filtroAtual = "pendente"
+                Toast.makeText(this, "Exibindo denúncias pendentes", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+
+
+    private fun carregarDenunciasFiltradas(statusFiltro: String) {
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                mMap.clear()
+                for (denunciaSnapshot in snapshot.children) {
+                    val denuncia = denunciaSnapshot.getValue(Denuncia::class.java)
+                    denuncia?.let {
+                        if (it.status.trim().equals(statusFiltro, ignoreCase = true)) {
+                            adicionarMarcadorNoMapa(it)
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseError", "Erro ao filtrar denúncias: ${error.message}")
+            }
+        })
+    }
+
     private fun updateIconColors(isMapaActivity: Boolean) {
 
         if (isMapaActivity) {
-            binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.white))
+            binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.color_app_bar))
             binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.black))
         } else {
             binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.black))
@@ -167,8 +245,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
 
 
     private fun updateUserLocationOnHomeScreen(latitude: Double, longitude: Double) {
-        val userLatLng = LatLng(latitude, longitude)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
+        val userLat = LatLng(latitude, longitude)
+        userLatLng = userLat
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLat, 15f))
 
         sendLocationToFirebase(latitude, longitude)
     }
@@ -182,24 +261,65 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
         mMap.setInfoWindowAdapter(infoAdapter)
 
         mMap.setOnInfoWindowClickListener { marker ->
-            val denuncia = marker.tag as? Denuncia
-            denuncia?.let {
-                infoAdapter.showFinalizarDialog(it)
+            val denuncia = marker.tag as? Denuncia ?: return@setOnInfoWindowClickListener
+
+            if (denuncia.status.trim().equals("pendente", ignoreCase = true)) {
+                verificarSePodeFinalizar(denuncia)
+            } else {
+                Toast.makeText(this, "Esta denúncia já está finalizada.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+    private fun verificarSePodeFinalizar(denuncia: Denuncia) {
+        val usuario = userLatLng
+        if (usuario == null) {
+            Toast.makeText(this, "Não foi possível obter sua localização.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val resultado = FloatArray(1)
+        android.location.Location.distanceBetween(
+            usuario.latitude,
+            usuario.longitude,
+            denuncia.latitude,
+            denuncia.longitude,
+            resultado
+        )
+
+        val distanciaMetros = resultado[0]
+
+        val raioMaximo = 1000f
+
+        if (distanciaMetros <= raioMaximo) {
+
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Finalizar denúncia")
+                .setMessage("Você está perto desta denúncia. Deseja marcá-la como finalizada?")
+                .setPositiveButton("Sim") { _, _ ->
+                    finalizarDenuncia(denuncia)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        } else {
+            Toast.makeText(
+                this,
+                "Você precisa estar mais perto da denúncia para finalizá-la.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+
+
 
     private fun carregarDenuncias() {
-        databaseReference.addValueEventListener(object : ValueEventListener {
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 mMap.clear()
 
                 for (denunciaSnapshot in snapshot.children) {
                     val denuncia = denunciaSnapshot.getValue(Denuncia::class.java)
                     denuncia?.let {
-                        if (!it.deletada) {
-                            adicionarMarcadorNoMapa(it)
-                        }
+                        adicionarMarcadorNoMapa(it)
                     }
                 }
             }
@@ -210,17 +330,54 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
         })
     }
 
+
+
     private fun adicionarMarcadorNoMapa(denuncia: Denuncia) {
         val localizacao = LatLng(denuncia.latitude, denuncia.longitude)
 
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.publicidade)
-        val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, false)
+        val statusNormalizado = denuncia.status
+            .trim()
+            .lowercase()
 
-        mMap.addMarker(MarkerOptions()
-            .position(localizacao)
-            .icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)))
-            ?.tag = denuncia
+        val iconResId = when (statusNormalizado) {
+            "finalizado", "finalizada" -> R.drawable.icon_mapa_finalizadas
+            "pendente", "pendentes"    -> R.drawable.icon_mapa_pendente
+            else -> R.drawable.publicidade
+        }
+
+
+        val (width, height) = when (iconResId) {
+            R.drawable.publicidade -> 100 to 100
+            R.drawable.icon_mapa_pendente -> 100 to 100
+            R.drawable.icon_mapa_finalizadas -> 100 to 100
+            else -> 100 to 100
+        }
+
+        val iconDescriptor = bitmapDescriptorFromVector(iconResId, width, height)
+
+        mMap.addMarker(
+            MarkerOptions()
+                .position(localizacao)
+                .icon(iconDescriptor)
+        )?.tag = denuncia
     }
+
+    private fun bitmapDescriptorFromVector(drawableResId: Int, width: Int, height: Int): BitmapDescriptor {
+        val drawable = ContextCompat.getDrawable(this, drawableResId)
+            ?: return BitmapDescriptorFactory.defaultMarker()
+
+        val bmpWidth = if (drawable.intrinsicWidth > 0) width else width
+        val bmpHeight = if (drawable.intrinsicHeight > 0) height else height
+
+        val bitmap = Bitmap.createBitmap(bmpWidth, bmpHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
+
 
     fun finalizarDenuncia(denuncia: Denuncia) {
         if (denuncia.id.isEmpty()) {
@@ -228,20 +385,24 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
             return
         }
 
-        val denunciaRef = FirebaseDatabase.getInstance().getReference("denuncias").child(denuncia.id)
-        val updates = mapOf(
-            "status" to "Finalizado",
-            "deletada" to true
-        )
+        val denunciaRef = FirebaseDatabase.getInstance()
+            .getReference("denuncias")
+            .child(denuncia.id)
 
+        val updates = mapOf(
+            "status" to "finalizado"
+        )
 
         denunciaRef.updateChildren(updates)
             .addOnSuccessListener {
                 Toast.makeText(this, "Denúncia finalizada com sucesso.", Toast.LENGTH_SHORT).show()
+                carregarDenuncias()
             }
             .addOnFailureListener { e ->
                 Log.e("FinalizarDenuncia", "Erro ao finalizar denúncia: ${e.message}")
                 Toast.makeText(this, "Erro ao finalizar denúncia: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
+
 }

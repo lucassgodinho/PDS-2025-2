@@ -25,13 +25,13 @@ class NotificacaoAdapter(private val notificacoes: List<Notificacao>) :
 
     class NotificacaoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val dataTextView: TextView = itemView.findViewById(R.id.data)
-        private val tipoManutencaoTextView: TextView = itemView.findViewById(R.id.tvTipoManutencao)
+        private val problemaTextView: TextView = itemView.findViewById(R.id.tvProblema)
         private val descricaoTextView: TextView = itemView.findViewById(R.id.tvDescricao)
 
         fun bind(notificacao: Notificacao) {
-            dataTextView.text ="Data: ${notificacao.data}"
-            tipoManutencaoTextView.text ="Tipo da Manutenção: ${notificacao.tipoManutencao}"
-            descricaoTextView.text = "Descrição: ${notificacao.descricao}"
+            dataTextView.text ="${notificacao.data}"
+            problemaTextView.text ="${notificacao.tipoManutencao}"
+            descricaoTextView.text = "${notificacao.descricao}"
         }
     }
 }

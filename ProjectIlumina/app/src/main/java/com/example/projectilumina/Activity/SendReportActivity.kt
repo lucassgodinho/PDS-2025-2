@@ -46,6 +46,8 @@ class SendReportActivity : AppCompatActivity() {
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var auth: FirebaseAuth
     private lateinit var notificationIcon: ImageButton
+    private lateinit var usersRef: DatabaseReference
+    private var nomeUsuarioLogado: String = "Usuário do aplicativo"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +55,14 @@ class SendReportActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         database = FirebaseDatabase.getInstance().getReference("denuncias")
+
         storage = FirebaseStorage.getInstance().reference
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         auth = FirebaseAuth.getInstance()
+
+        usersRef = FirebaseDatabase.getInstance().getReference("users")
+        carregarNomeUsuario()
 
         notificationIcon = findViewById(R.id.icon_notificacao)
 
@@ -112,6 +118,18 @@ class SendReportActivity : AppCompatActivity() {
                 enviarDenuncia()
             }
         }
+        binding.checkTorres.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.checkCapao.isChecked = false
+            }
+        }
+
+        binding.checkCapao.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.checkTorres.isChecked = false
+            }
+        }
+
     }
 
     private fun obterLocalizacao() {
@@ -234,6 +252,10 @@ class SendReportActivity : AppCompatActivity() {
                     denuncia.descricao,
                     denuncia.userId
                 )
+
+                abrirEmailPrefeitura(denuncia, nomeUsuarioLogado)
+
+
                 Toast.makeText(this, "Denúncia enviada/atualizada com sucesso!", Toast.LENGTH_SHORT)
                     .show()
                 finish()
@@ -247,6 +269,70 @@ class SendReportActivity : AppCompatActivity() {
             }
         }
     }
+    private fun abrirEmailPrefeitura(denuncia: Denuncia, nomeUsuario: String) {
+        val emailDestino: String
+
+        val torresMarcado = binding.checkTorres.isChecked
+        val capaoMarcado = binding.checkCapao.isChecked
+
+        if (!torresMarcado && !capaoMarcado) {
+            return
+        }
+
+        if (torresMarcado && capaoMarcado) {
+            Toast.makeText(this, "Selecione apenas uma cidade para enviar o e-mail.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        emailDestino = if (torresMarcado) {
+
+            "lucassgodinho@icloud.com"
+        } else {
+            "lucasgodinho@rede.ulbra.br"
+        }
+
+        val assunto = "Denúncia de Iluminação Pública"
+        val corpoEmail = """
+            Uma nova denúncia foi registrada pelo aplicativo ProjectIlumina.
+            
+            Nome do usuário: $nomeUsuario
+            Bairro: ${denuncia.bairro}
+            Rua: ${denuncia.rua}
+            Problema: ${denuncia.problema}
+            Descrição: ${denuncia.descricao}
+        """.trimIndent()
+
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(emailDestino))
+            putExtra(Intent.EXTRA_SUBJECT, assunto)
+            putExtra(Intent.EXTRA_TEXT, corpoEmail)
+        }
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Nenhum aplicativo de e-mail encontrado.", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun carregarNomeUsuario() {
+        val uid = auth.currentUser?.uid ?: return
+
+        usersRef.child(uid).get().addOnSuccessListener { snapshot ->
+            val nome = snapshot.child("nome").getValue(String::class.java)
+
+            if (!nome.isNullOrBlank()) {
+                nomeUsuarioLogado = nome
+                Log.d("USUARIO", "Nome do usuário carregado: $nomeUsuarioLogado")
+            } else {
+                Log.d("USUARIO", "Nome do usuário não encontrado, usando padrão.")
+            }
+        }.addOnFailureListener { e ->
+            Log.e("USUARIO", "Erro ao carregar nome do usuário", e)
+        }
+    }
+
+
 
     fun criarDenunciaEEnviarNotificacoes(
         denunciaId: String,

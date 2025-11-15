@@ -89,7 +89,7 @@ class ReportActivity : AppCompatActivity() {
         if (isMapaActivity) {
 
             binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.black))
-            binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.white))
+            binding.endBar.iconDenuncia.setColorFilter(ContextCompat.getColor(this, R.color.color_app_bar))
         } else {
 
             binding.endBar.iconMapa.setColorFilter(ContextCompat.getColor(this, R.color.black))

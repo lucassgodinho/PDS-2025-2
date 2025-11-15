@@ -20,6 +20,8 @@
     <color name="cinza_claro">#D9D9D9</color>
     <color name="cinza_fundo">#EEEEEE</color>
     <color name="cinza_feed">#DBDBDB</color>
+    <color name="color_app_bar">#1500FF</color>
+
 
 
 </resources>

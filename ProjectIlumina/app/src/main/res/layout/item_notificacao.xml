@@ -19,19 +19,18 @@
             android:layout_height="wrap_content"
             android:text="Problema:"
             android:textColor="@color/black"
-            android:layout_weight="1" />
+            android:layout_weight="0.7" />
 
         <TextView
             android:id="@+id/data"
             android:layout_width="1dp"
             android:layout_height="20dp"
-            android:text="Data"
-            android:layout_marginStart="220dp"
-            android:layout_weight="1" />
+            android:layout_weight="0.3"
+            android:text="Data" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/id_problema"
+        android:id="@+id/tvProblema"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="problema"

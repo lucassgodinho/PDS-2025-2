@@ -12,11 +12,10 @@ data class Denuncia(
     var imagemUrl: String? = null,
     val userId: String = "",
     var statusColor: String = "",
-    var status: String = "Em Andamento",
-    var deletada: Boolean = false
+    var status: String = "pendente",
 )
 {
     override fun toString(): String {
-        return "Denuncia(id=$id, cidade='$cidade', bairro='$bairro', problema='$problema', dataHora='$dataHora', descricao='$descricao', latitude=$latitude, longitude=$longitude, imagemUrl=$imagemUrl, userId=$userId, status=$status, deletada=$deletada)"
+        return "Denuncia(id=$id, cidade='$cidade', bairro='$bairro', problema='$problema', dataHora='$dataHora', descricao='$descricao', latitude=$latitude, longitude=$longitude, imagemUrl=$imagemUrl, userId=$userId, status=$status)"
     }
 }

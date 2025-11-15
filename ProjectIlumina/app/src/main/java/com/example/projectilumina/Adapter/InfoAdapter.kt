@@ -18,7 +18,7 @@ class InfoAdapter(private val activity: HomeActivity) : GoogleMap.InfoWindowAdap
 
     override fun getInfoWindow(marker: Marker): View? {
         val dataTextView = window.findViewById<TextView>(R.id.data)
-        val problemaTextView = window.findViewById<TextView>(R.id.tvTipoManutencao)
+        val problemaTextView = window.findViewById<TextView>(R.id.tvProblema)
         val descricaoTextView = window.findViewById<TextView>(R.id.tvDescricao)
 
         val denuncia = marker.tag as? Denuncia
