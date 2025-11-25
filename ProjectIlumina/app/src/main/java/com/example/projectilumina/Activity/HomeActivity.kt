@@ -8,6 +8,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.os.Bundle
+import com.google.firebase.messaging.FirebaseMessaging
+import java.util.Locale
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
@@ -48,21 +50,21 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var notificationIcon: ImageButton
     private val REQUEST_NOTIFICATION_PERMISSION = 1234
     private var userLatLng: LatLng? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         databaseReference = FirebaseDatabase.getInstance().getReference("denuncias")
-
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         notificationIcon = findViewById(R.id.icon_notificacao)
-
         NotificationUtils.atualizarIconeNotificacao(notificationIcon)
 
         verificarPermissaoNotificacao()
+
+        inscreverUsuarioNoTopicoDaCidade()
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -71,19 +73,29 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
 
 
     }
+
     private fun verificarPermissaoNotificacao() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
 
-
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                REQUEST_NOTIFICATION_PERMISSION)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQUEST_NOTIFICATION_PERMISSION
+                )
+            } else {
+                NotificationManagerHelper.verificarEEnviarNotificacao(this)
+            }
 
         } else {
             NotificationManagerHelper.verificarEEnviarNotificacao(this)
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -403,6 +415,38 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
                 Toast.makeText(this, "Erro ao finalizar denúncia: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+    private fun inscreverUsuarioNoTopicoDaCidade() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
+
+        userRef.child("cidade").get().addOnSuccessListener { snapshot ->
+
+            val cidade = snapshot.getValue(String::class.java)?.trim() ?: return@addOnSuccessListener
+            val topico = normalizarCidadeParaTopico(cidade) ?: return@addOnSuccessListener
+
+            FirebaseMessaging.getInstance()
+                .subscribeToTopic(topico)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("TOPIC", "Inscrito no tópico: $topico")
+                    } else {
+                        Log.e("TOPIC", "Erro ao inscrever no tópico", task.exception)
+                    }
+                }
+        }
+    }
+
+    private fun normalizarCidadeParaTopico(cidade: String): String? {
+        val c = cidade.lowercase(Locale.getDefault()).trim()
+
+        return when {
+            c.contains("torres") -> "torres"
+            c.contains("capao") || c.contains("capão") -> "capao"
+            else -> null
+        }
+    }
+
 
 
 }

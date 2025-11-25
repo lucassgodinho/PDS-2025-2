@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lista_cidades">
+        <item>Capão da Canoa</item>
+        <item>Torres</item>
+        <item>Outra</item>
+    </string-array>
+</resources>

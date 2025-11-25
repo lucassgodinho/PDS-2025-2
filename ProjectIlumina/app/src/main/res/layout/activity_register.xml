@@ -73,19 +73,31 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginTop="10dp"
-            android:text="Digite sua Cidade"
+            android:text="Selecione sua Cidade"
             android:textSize="16sp"
             android:textColor="@color/cinza"/>
 
-        <EditText
-            android:id="@+id/editTextCidade"
+
+        <Spinner
+            android:id="@+id/spinnerCidade"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Cidade"
-            android:paddingStart="16dp"
             android:layout_marginTop="10dp"
-            android:textColorHint="@color/edittext"/>
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:paddingStart="8dp" />
+
+
+        <EditText
+            android:id="@+id/editTextOutraCidade"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_rectangle_yellow"
+            android:hint="Digite sua cidade"
+            android:paddingStart="16dp"
+            android:textColorHint="@color/edittext"
+            android:visibility="gone" />
+
 
         <TextView
             android:layout_width="match_parent"

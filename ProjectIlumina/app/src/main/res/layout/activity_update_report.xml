@@ -3,168 +3,175 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/app_bar_default"
-        layout="@layout/app_bar_default"
+    <ImageButton
+        android:id="@+id/buttonreturn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/icon_retornar"
+        android:contentDescription="Voltar" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:padding="16dp" />
+        android:layout_marginTop="4dp"
+        android:text="Editar Denúncias"
+        android:textColor="@color/cinza"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"/>
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingTop="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Digite a rua e o Número:"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/edt_rua"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Rua e N°:"
-            android:textColorHint="@color/edittext"
-            android:paddingStart="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Digite a Cidade onde a manutenção é necessária:"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/edt_cidade"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Cidade:"
-            android:textColorHint="@color/edittext"
-            android:paddingStart="20dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Digite o bairro onde a manutenção é necessária:"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/edt_bairro"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Bairro:"
-            android:textColorHint="@color/edittext"
-            android:paddingStart="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Informe qual problema ocorreu:"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/edt_problema"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Problema:"
-            android:textColorHint="@color/edittext"
-            android:paddingStart="20dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Digite mais sobre o assunto:"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/edt_descricao"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:hint="Descrição:"
-            android:textColorHint="@color/edittext"
-            android:paddingStart="20dp"/>
-
-        <Button
-            android:id="@+id/btnSelecionarImagem"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/rounded_rectangle_yellow"
-            android:text="Adicionar Fotos "
-            android:textSize="20dp"
-            android:textAllCaps="false"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Deseja enviar email para a prefeitura?"
-            android:textSize="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"
-            />
+        android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/checklist_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingTop="16dp">
 
-            <CheckBox
-                android:id="@+id/check_torres"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Torres"/>
+                android:text="Digite a rua e o Número:"
+                android:textSize="16sp" />
 
-            <CheckBox
-                android:id="@+id/check_capao"
+            <EditText
+                android:id="@+id/edt_rua"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_rectangle_yellow"
+                android:hint="Rua e N°:"
+                android:textColorHint="@color/edittext"
+                android:paddingStart="20dp" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Capão da Canoa"/>
+                android:text="Digite a Cidade onde a manutenção é necessária:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edt_cidade"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_rectangle_yellow"
+                android:hint="Cidade:"
+                android:textColorHint="@color/edittext"
+                android:paddingStart="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Digite o bairro onde a manutenção é necessária:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edt_bairro"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_rectangle_yellow"
+                android:hint="Bairro:"
+                android:textColorHint="@color/edittext"
+                android:paddingStart="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Informe qual problema ocorreu:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edt_problema"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="@drawable/rounded_rectangle_yellow"
+                android:hint="Problema:"
+                android:textColorHint="@color/edittext"
+                android:paddingStart="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Digite mais sobre o assunto:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edt_descricao"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/rounded_rectangle_yellow"
+                android:hint="Descrição:"
+                android:textColorHint="@color/edittext"
+                android:paddingStart="20dp" />
+
+            <Button
+                android:id="@+id/btnSelecionarImagem"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_rectangle_yellow"
+                android:text="Adicionar Fotos "
+                android:textSize="20sp"
+                android:textAllCaps="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Deseja enviar email para a prefeitura?"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:id="@+id/checklist_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <CheckBox
+                    android:id="@+id/check_torres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Torres" />
+
+                <CheckBox
+                    android:id="@+id/check_capao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Capão da Canoa" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_concluir"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@color/green"
+                android:text="Atualizar"
+                android:textColor="@color/white"
+                android:textAllCaps="false" />
+
         </LinearLayout>
-
-
-
-        <Button
-            android:id="@+id/btn_concluir"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@color/green"
-            android:text="Atualizar"
-            android:textColor="@color/white"
-            android:textAllCaps="false"/>
-    </LinearLayout>
+    </ScrollView>
 
     <include
         android:id="@+id/end_bar"
         layout="@layout/end_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/recylcer_button_navigation"
         android:elevation="4dp"
         android:orientation="horizontal"
