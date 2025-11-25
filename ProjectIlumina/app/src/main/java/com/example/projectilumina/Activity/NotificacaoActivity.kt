@@ -2,6 +2,7 @@ package com.example.projectilumina.Activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ class NotificacaoActivity : AppCompatActivity() {
     private lateinit var notificacoesAdapter: NotificacaoAdapter
     private val notificacoesList = mutableListOf<Notificacao>()
     private lateinit var binding: ActivityNotificacaoBinding
+
     private var childEventListener: ChildEventListener? = null
     private var isChildListenerAttached = false
 
@@ -26,7 +28,6 @@ class NotificacaoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupRecyclerView()
-        carregarNotificacoes()
         setupNavigationButtons()
 
         NotificationUtils.atualizarIconeNotificacao(binding.appBarDefault.root)
@@ -35,22 +36,18 @@ class NotificacaoActivity : AppCompatActivity() {
     private fun setupNavigationButtons() {
         binding.appBarDefault.textActivity.text = "Notificação"
 
-        binding.appBarDefault.iconReturn.setOnClickListener {
-            finish()
-        }
+        binding.appBarDefault.iconReturn.setOnClickListener { finish() }
 
         binding.endBar.iconDenuncia.setOnClickListener {
-            val intent = Intent(this, ReportActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, ReportActivity::class.java))
         }
 
         binding.endBar.iconMapa.setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HomeActivity::class.java))
         }
-        binding.endBar.iconFeed.setOnClickListener{
-            val intent = Intent(this, FeedActivity::class.java)
-            startActivity(intent)
+
+        binding.endBar.iconFeed.setOnClickListener {
+            startActivity(Intent(this, FeedActivity::class.java))
         }
     }
 
@@ -62,71 +59,74 @@ class NotificacaoActivity : AppCompatActivity() {
         }
     }
 
-    private fun carregarNotificacoes() {
-        notificacoesList.clear()
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val notificacoesRef = FirebaseDatabase.getInstance().getReference("notificacoes").child(userId)
-
-
-        notificacoesRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                notificacoesList.clear()
-                for (notificacaoSnapshot in snapshot.children) {
-                    val notificacao = notificacaoSnapshot.getValue(Notificacao::class.java)
-                    notificacao?.let { notificacoesList.add(it) }
-                }
-                notificacoesAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@NotificacaoActivity, "Erro ao carregar notificações", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
     private fun setupChildEventListener() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val notificacoesRef = FirebaseDatabase.getInstance().getReference("notificacoes").child(userId)
+        val notificacoesRef = FirebaseDatabase.getInstance()
+            .getReference("notificacoes")
+            .child(userId)
 
         if (!isChildListenerAttached) {
+            notificacoesList.clear()
+            notificacoesAdapter.notifyDataSetChanged()
+
             childEventListener = notificacoesRef.addChildEventListener(object : ChildEventListener {
+
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val notificacao = snapshot.getValue(Notificacao::class.java)
-                    notificacao?.let {
-                        if (notificacoesList.none { it.denunciaId == notificacao.denunciaId }) {
-                            notificacoesList.add(it)
-                            notificacoesAdapter.notifyItemInserted(notificacoesList.size - 1)
-                        }
+                    val notificacao = snapshot.getValue(Notificacao::class.java) ?: return
+
+                    val index = notificacoesList.indexOfFirst {
+                        it.denunciaId == notificacao.denunciaId
+                    }
+
+                    if (index == -1) {
+
+                        notificacoesList.add(notificacao)
+                        notificacoesAdapter.notifyItemInserted(notificacoesList.size - 1)
+                    } else {
+
+                        notificacoesList[index] = notificacao
+                        notificacoesAdapter.notifyItemChanged(index)
                     }
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    val notificacao = snapshot.getValue(Notificacao::class.java)
-                    notificacao?.let {
-                        val index = notificacoesList.indexOfFirst { it.denunciaId == notificacao.denunciaId }
-                        if (index != -1) {
-                            notificacoesList[index] = notificacao
-                            notificacoesAdapter.notifyItemChanged(index)
-                        }
+                    val notificacao = snapshot.getValue(Notificacao::class.java) ?: return
+
+                    val index = notificacoesList.indexOfFirst {
+                        it.denunciaId == notificacao.denunciaId
+                    }
+
+                    if (index != -1) {
+                        notificacoesList[index] = notificacao
+                        notificacoesAdapter.notifyItemChanged(index)
                     }
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    val notificacao = snapshot.getValue(Notificacao::class.java)
-                    notificacao?.let {
-                        notificacoesList.remove(it)
-                        notificacoesAdapter.notifyDataSetChanged()
+                    val notificacao = snapshot.getValue(Notificacao::class.java) ?: return
+
+                    val index = notificacoesList.indexOfFirst {
+                        it.denunciaId == notificacao.denunciaId
+                    }
+
+                    if (index != -1) {
+                        notificacoesList.removeAt(index)
+                        notificacoesAdapter.notifyItemRemoved(index)
                     }
                 }
 
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-
-                }
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@NotificacaoActivity, "Erro ao carregar notificações", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@NotificacaoActivity,
+                        "Erro ao carregar notificações",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("NotificacaoActivity", error.message)
                 }
             })
+
             isChildListenerAttached = true
         }
     }
@@ -139,8 +139,9 @@ class NotificacaoActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val notificacoesRef = FirebaseDatabase.getInstance().getReference("notificacoes").child(userId)
-
+        val notificacoesRef = FirebaseDatabase.getInstance()
+            .getReference("notificacoes")
+            .child(userId)
 
         childEventListener?.let { notificacoesRef.removeEventListener(it) }
         isChildListenerAttached = false
@@ -153,7 +154,9 @@ class NotificacaoActivity : AppCompatActivity() {
 
     private fun marcarNotificacoesComoLidas() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val notificacoesRef = FirebaseDatabase.getInstance().getReference("notificacoes").child(userId)
+        val notificacoesRef = FirebaseDatabase.getInstance()
+            .getReference("notificacoes")
+            .child(userId)
 
         notificacoesRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -163,8 +166,16 @@ class NotificacaoActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@NotificacaoActivity, "Erro ao marcar notificações como lidas", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@NotificacaoActivity,
+                    "Erro ao marcar notificações como lidas",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 }
+
+
+
+

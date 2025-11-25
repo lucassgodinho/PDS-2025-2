@@ -30,7 +30,7 @@ class NotificacaoAdapter(private val notificacoes: List<Notificacao>) :
 
         fun bind(notificacao: Notificacao) {
             dataTextView.text ="${notificacao.data}"
-            problemaTextView.text ="${notificacao.tipoManutencao}"
+            problemaTextView.text ="${notificacao.problema}"
             descricaoTextView.text = "${notificacao.descricao}"
         }
     }

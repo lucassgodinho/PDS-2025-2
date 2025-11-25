@@ -34,7 +34,11 @@
         <activity
             android:name=".Activity.ReportActivity"
             android:exported="false" />
+        <activity android:name=".Activity.UpdateReport" />
 
+        <activity android:name=".Activity.UpdateProfile" />
+
+        <activity android:name=".Activity.CommentsActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCtvNzycNzwREiL1kjM5KwQFHuAQh-xUwg" />
