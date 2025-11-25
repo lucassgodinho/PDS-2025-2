@@ -5,12 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
         <include
             android:id="@+id/app_bar_home"
@@ -21,13 +19,14 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <include
-                android:id="@+id/feed"
-                layout="@layout/item_feed"/>
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerFeed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:clipToPadding="false"/>
 
         </FrameLayout>
-
 
         <include
             android:id="@+id/end_bar"
