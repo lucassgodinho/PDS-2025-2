@@ -5,11 +5,7 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.database();
 
-/**
- * Normaliza nome da cidade pra virar tópico
- * "Torres" -> "torres"
- * "Capão da Canoa" -> "capao"
- */
+
 function topicFromCidade(cidade) {
   if (!cidade) return null;
   const c = cidade.toLowerCase().trim();
@@ -17,7 +13,7 @@ function topicFromCidade(cidade) {
   if (c.includes("torres")) return "torres";
   if (c.includes("capao") || c.includes("capão")) return "capao";
 
-  return null; // cidade não mapeada
+  return null; 
 }
 
 async function montarFeedItem(denunciaId, denunciaData) {
@@ -47,10 +43,6 @@ async function montarFeedItem(denunciaId, denunciaData) {
     dataHora: denunciaData.dataHora || ""
   };
 }
-
-/**
- * 1) CRIOU DENÚNCIA -> cria feed + envia notificação por tópico (DATA ONLY)
- */
 exports.onDenunciaCreated = onValueCreated(
   "/denuncias/{denunciaId}",
   async (event) => {
@@ -58,13 +50,13 @@ exports.onDenunciaCreated = onValueCreated(
     const denuncia = event.data.val();
     if (!denuncia) return;
 
-    // cria/atualiza feed
+ 
     const feedItem = await montarFeedItem(denunciaId, denuncia);
     if (feedItem) {
       await db.ref(`feed/${denunciaId}`).set(feedItem);
     }
 
-    // tópico da cidade
+
     const cidadeDestino = denuncia.cidade;
     const topic = topicFromCidade(cidadeDestino);
     if (!topic) {
@@ -72,7 +64,6 @@ exports.onDenunciaCreated = onValueCreated(
       return;
     }
 
-    // ✅ DATA ONLY (pra você estilizar no Android)
     const payload = {
       data: {
         denunciaId,
@@ -95,9 +86,7 @@ exports.onDenunciaCreated = onValueCreated(
   }
 );
 
-/**
- * 2) ATUALIZOU DENÚNCIA -> atualiza feed + notifica se mudou cidade
- */
+
 exports.onDenunciaUpdated = onValueUpdated(
   "/denuncias/{denunciaId}",
   async (event) => {
@@ -106,7 +95,6 @@ exports.onDenunciaUpdated = onValueUpdated(
     const after = event.data.after.val();
     if (!after) return;
 
-    // atualiza feed
     const feedItem = await montarFeedItem(denunciaId, after);
     if (feedItem) {
       await db.ref(`feed/${denunciaId}`).update(feedItem);
