@@ -11,7 +11,9 @@ import com.bumptech.glide.Glide
 import com.example.projectilumina.R
 import com.example.projectilumina.data.Denuncia
 
-class DenunciaAdapter(private val denunciaList: List<Denuncia>) :
+class DenunciaAdapter(
+    private val denunciaList: List<Denuncia>,
+    private val onItemClick: (Denuncia) -> Unit) :
     RecyclerView.Adapter<DenunciaAdapter.DenunciaViewHolder>() {
 
     inner class DenunciaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,7 +32,7 @@ class DenunciaAdapter(private val denunciaList: List<Denuncia>) :
         fun bind(denuncia: Denuncia) {
             tvCidade.text = "Cidade: ${denuncia.cidade}"
             tvBairro.text = "Bairro: ${denuncia.bairro}"
-            tvRua.text = "Bairro: ${denuncia.rua}"
+            tvRua.text = "Rua: ${denuncia.rua}"
             tvProblema.text = "Problema: ${denuncia.problema}"
             tvDataHora.text = "Data e Hora: ${denuncia.dataHora}"
             tvDescricao.text = "Descrição: ${denuncia.descricao}"
@@ -51,6 +53,9 @@ class DenunciaAdapter(private val denunciaList: List<Denuncia>) :
                     .into(tvImagem)
             } else {
                 tvImagem.setImageResource(R.drawable.icon_logo)
+            }
+            itemView.setOnClickListener {
+                onItemClick(denuncia)
             }
         }
     }
