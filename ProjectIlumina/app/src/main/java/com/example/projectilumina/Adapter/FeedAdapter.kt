@@ -61,11 +61,11 @@ class FeedAdapter(
                 Glide.with(itemView.context)
                     .load(item.fotoPerfilUrl)
                     .circleCrop()
-                    .placeholder(R.drawable.icon_feed_profile)
-                    .error(R.drawable.icon_feed_profile)
+                    .placeholder(R.drawable.foto_perfil)
+                    .error(R.drawable.foto_perfil)
                     .into(imageProfile)
             } else {
-                imageProfile.setImageResource(R.drawable.icon_feed_profile)
+                imageProfile.setImageResource(R.drawable.foto_perfil)
             }
 
             if (!item.imagemUrl.isNullOrBlank()) {
@@ -126,7 +126,6 @@ class FeedAdapter(
             textLikes.text = if (qtd == 1) "1 like" else "$qtd likes"
         }
 
-        /** Alterna like/deslike e atualiza Firebase + objeto item */
         private fun alternarLike(item: FeedItem, uid: String) {
             val feedId = item.id ?: return
 

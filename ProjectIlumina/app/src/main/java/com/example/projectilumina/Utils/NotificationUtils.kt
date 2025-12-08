@@ -35,9 +35,9 @@ object NotificationUtils {
                 }
 
                 if (temNotificacaoNova) {
-                    notificationIcon.setImageResource(R.drawable.icon_notificacao_ativa)
+                    notificationIcon.setImageResource(R.drawable.icon_notification_on)
                 } else {
-                    notificationIcon.setImageResource(R.drawable.icon_notificacao)
+                    notificationIcon.setImageResource(R.drawable.icon_notification)
                 }
             }
 

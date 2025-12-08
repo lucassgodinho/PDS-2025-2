@@ -22,6 +22,7 @@ import com.example.projectilumina.Utils.NotificationUtils
 import com.example.projectilumina.data.Denuncia
 import com.example.projectilumina.data.FeedItem
 import com.example.projectilumina.databinding.ActivitySendReportBinding
+import com.example.projectilumina.Utils.LoadingDialog
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
@@ -46,6 +47,9 @@ class SendReportActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var notificationIcon: ImageButton
     private lateinit var usersRef: DatabaseReference
+    private val RAIO_BLOQUEIO_METROS = 30.0
+    private lateinit var loading: LoadingDialog
+
 
     private var nomeUsuarioLogado: String = "Usuário do aplicativo"
 
@@ -70,6 +74,9 @@ class SendReportActivity : AppCompatActivity() {
         pedirPermissaoNotificacaoAndroid13()
         obterLocalizacao()
         setupNavigationButtons()
+        loading = LoadingDialog(this)
+
+
 
         imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -160,6 +167,12 @@ class SendReportActivity : AppCompatActivity() {
     }
 
     private fun enviarDenuncia() {
+        if (!binding.checkTorres.isChecked && !binding.checkCapao.isChecked) {
+            Toast.makeText(this, "Selecione a prefeitura para envio da denúncia.", Toast.LENGTH_SHORT).show()
+            binding.btnConcluir.isEnabled = true
+            return
+        }
+
         val problema = binding.edtProblema.text.toString().trim()
         val descricao = binding.edtDescricao.text.toString().trim()
         val rua = binding.edtRua.text.toString().trim()
@@ -169,62 +182,63 @@ class SendReportActivity : AppCompatActivity() {
         val currentDate =
             SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date())
 
-        val prefeituraDestino = when {
-            binding.checkTorres.isChecked -> "Torres"
-            binding.checkCapao.isChecked -> "Capão da Canoa"
-            else -> null
-        }
-
-        if (problema.isEmpty() || descricao.isEmpty()) {
-            Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
-            binding.btnConcluir.isEnabled = true
-            return
-        }
-
         val latitude = userLocation?.latitude ?: 0.0
         val longitude = userLocation?.longitude ?: 0.0
-        val userId = auth.currentUser?.uid ?: return
 
-        if (imageUri == null) {
-            Toast.makeText(this, "Selecione uma imagem para a denúncia.", Toast.LENGTH_SHORT).show()
-            binding.btnConcluir.isEnabled = true
-            return
-        }
-
-        val storageRef = FirebaseStorage.getInstance().reference
-            .child("imagens_denuncias/${System.currentTimeMillis()}.jpg")
-
-        storageRef.putFile(imageUri!!)
-            .continueWithTask { task ->
-                if (!task.isSuccessful) throw task.exception!!
-                storageRef.downloadUrl
+        verificarDenunciaProxima(latitude, longitude) { podeEnviar ->
+            if (!podeEnviar) {
+                Toast.makeText(this, "Já existe outra denúncia não finalizada próxima!", Toast.LENGTH_LONG).show()
+                binding.btnConcluir.isEnabled = true
+                return@verificarDenunciaProxima
             }
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val imageUrl = task.result.toString()
 
-                    val denuncia = Denuncia(
-                        id = "",
-                        cidade = cidade,
-                        rua = rua,
-                        bairro = bairro,
-                        problema = problema,
-                        dataHora = currentDate,
-                        descricao = descricao,
-                        latitude = latitude,
-                        longitude = longitude,
-                        imagemUrl = imageUrl,
-                        userId = userId,
-                        prefeituraDestino = prefeituraDestino
-                    )
 
-                    salvarDenuncia(denuncia)
-                } else {
-                    Toast.makeText(this, "Erro ao enviar a imagem.", Toast.LENGTH_SHORT).show()
-                    binding.btnConcluir.isEnabled = true
+            if (imageUri == null) {
+                Toast.makeText(this, "Selecione uma imagem para a denúncia.", Toast.LENGTH_SHORT).show()
+                binding.btnConcluir.isEnabled = true
+                return@verificarDenunciaProxima
+            }
+
+            val storageRef = FirebaseStorage.getInstance().reference
+                .child("imagens_denuncias/${System.currentTimeMillis()}.jpg")
+
+            loading.show()
+            storageRef.putFile(imageUri!!)
+                .continueWithTask { task ->
+                    if (!task.isSuccessful) throw task.exception!!
+                    storageRef.downloadUrl
                 }
-            }
+                .addOnCompleteListener { task ->
+                    loading.hide()
+                    if (task.isSuccessful) {
+                        val imageUrl = task.result.toString()
+
+                        val denuncia = Denuncia(
+                            id = "",
+                            cidade = cidade,
+                            rua = rua,
+                            bairro = bairro,
+                            problema = problema,
+                            dataHora = currentDate,
+                            descricao = descricao,
+                            latitude = latitude,
+                            longitude = longitude,
+                            imagemUrl = imageUrl,
+                            userId = auth.currentUser?.uid ?: "",
+                            prefeituraDestino = null,
+                            status = "Pendente"
+                        )
+
+                        salvarDenuncia(denuncia)
+
+                    } else {
+                        Toast.makeText(this, "Erro ao enviar a imagem.", Toast.LENGTH_SHORT).show()
+                        binding.btnConcluir.isEnabled = true
+                    }
+                }
+        }
     }
+
 
     private fun salvarDenuncia(denuncia: Denuncia) {
         val reportsRef = FirebaseDatabase.getInstance().getReference("denuncias")
@@ -246,41 +260,51 @@ class SendReportActivity : AppCompatActivity() {
     }
 
     private fun abrirEmailPrefeitura(denuncia: Denuncia, nomeUsuario: String) {
+
         val torresMarcado = binding.checkTorres.isChecked
         val capaoMarcado = binding.checkCapao.isChecked
-        if (!torresMarcado && !capaoMarcado) return
 
-        if (torresMarcado && capaoMarcado) {
-            Toast.makeText(this, "Selecione apenas uma cidade.", Toast.LENGTH_SHORT).show()
+        if (!torresMarcado && !capaoMarcado) {
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val emailDestino = if (torresMarcado) {
-            "lucassgodinho@icloud.com"
-        } else {
-            "lucasgodinho@rede.ulbra.br"
-        }
+        val emailDestino = if (torresMarcado)
+            "ouvidoria@torres.rs.gov.br"
+        else
+            "ouvidoriageral@capaodacanoa.rs.gov.br"
 
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
+        val corpoEmail = """
+        Nova denúncia registrada pelo app Ilumina.
+
+        Nome do denunciante: $nomeUsuario
+
+        📍 Local:
+        Cidade: ${denuncia.cidade}
+        Bairro: ${denuncia.bairro}
+        Rua: ${denuncia.rua}
+
+        🚨 Problema:
+        ${denuncia.problema}
+
+        📝 Descrição:
+        ${denuncia.descricao}
+    """.trimIndent()
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(emailDestino))
-            putExtra(Intent.EXTRA_SUBJECT, "Denúncia de Iluminação Pública")
-            putExtra(
-                Intent.EXTRA_TEXT,
-                """
-                Nova denúncia registrada no ProjectIlumina.
-                
-                Nome: $nomeUsuario
-                Bairro: ${denuncia.bairro}
-                Rua: ${denuncia.rua}
-                Problema: ${denuncia.problema}
-                Descrição: ${denuncia.descricao}
-                """.trimIndent()
-            )
+            putExtra(Intent.EXTRA_SUBJECT, "Denúncia de Iluminação Pública - ProjectIlumina")
+            putExtra(Intent.EXTRA_TEXT, corpoEmail)
         }
 
-        if (intent.resolveActivity(packageManager) != null) startActivity(intent)
+        try {
+            startActivity(Intent.createChooser(intent, "Enviar denúncia por e-mail"))
+        } catch (e: Exception) {
+            Toast.makeText(this, "Nenhum aplicativo de e-mail encontrado no dispositivo.", Toast.LENGTH_LONG).show()
+        }
     }
+
 
     private fun carregarNomeUsuario() {
         val uid = auth.currentUser?.uid ?: return
@@ -289,5 +313,55 @@ class SendReportActivity : AppCompatActivity() {
             if (!nome.isNullOrBlank()) nomeUsuarioLogado = nome
         }
     }
+    private fun verificarDenunciaProxima(
+        latAtual: Double,
+        lngAtual: Double,
+        callback: (Boolean) -> Unit
+    ) {
+        val ref = FirebaseDatabase.getInstance().getReference("denuncias")
+
+        ref.get().addOnSuccessListener { snapshot ->
+
+            for (child in snapshot.children) {
+                val denuncia = child.getValue(Denuncia::class.java) ?: continue
+
+                if (denuncia.status != "Pendente") continue
+
+                val dist = calcularDistancia(
+                    latAtual,
+                    lngAtual,
+                    denuncia.latitude,
+                    denuncia.longitude
+                )
+
+                if (dist <= RAIO_BLOQUEIO_METROS) {
+                    callback(false)
+                    return@addOnSuccessListener
+                }
+            }
+
+            callback(true)
+        }
+    }
+
+    private fun calcularDistancia(
+        lat1: Double, lon1: Double,
+        lat2: Double, lon2: Double
+    ): Double {
+
+        val R = 6371000.0
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+
+        val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) *
+                Math.cos(Math.toRadians(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2)
+
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return R * c
+    }
+
 }
 

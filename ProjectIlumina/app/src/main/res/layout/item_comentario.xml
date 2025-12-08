@@ -6,11 +6,12 @@
     android:padding="6dp">
 
     <ImageView
-        android:id="@+id/comentario_pro
+        android:id="@+id/comentario_profile"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/icon_feed_profile" />
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/foto_perfil" />
 
 
     <LinearLayout

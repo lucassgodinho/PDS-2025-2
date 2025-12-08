@@ -2,17 +2,20 @@ package com.example.projectilumina.Activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectilumina.Adapter.FeedAdapter
 import com.example.projectilumina.R
+import com.example.projectilumina.Utils.NotificationUtils
 import com.example.projectilumina.data.Comentarios
 import com.example.projectilumina.data.FeedItem
 import com.example.projectilumina.databinding.ActivityFeedBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.Normalizer
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,9 +25,12 @@ class FeedActivity : AppCompatActivity() {
     private lateinit var adapter: FeedAdapter
     private val feedList = ArrayList<FeedItem>()
 
+    private lateinit var notificationIcon: ImageButton
     private lateinit var feedRef: DatabaseReference
     private lateinit var usersRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
+
+    private var cidadeUsuario: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +46,7 @@ class FeedActivity : AppCompatActivity() {
 
         adapter = FeedAdapter(
             feedList,
-            onItemClick = {  },
+            onItemClick = {},
             onSendComment = { item, texto ->
                 salvarComentario(item, texto)
             }
@@ -50,11 +56,14 @@ class FeedActivity : AppCompatActivity() {
 
         setupNavigationButtons()
         updateIconColors()
-        carregarFeed()
+
+        notificationIcon = findViewById(R.id.icon_notificacao)
+        NotificationUtils.atualizarIconeNotificacao(notificationIcon)
+
+        carregarCidadeDoUsuario()
     }
 
     private fun updateIconColors() {
-
         binding.endBar.iconFeed.setColorFilter(
             ContextCompat.getColor(this, R.color.color_app_bar)
         )
@@ -63,7 +72,6 @@ class FeedActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationButtons() {
-
         binding.appBarHome.textActivity.text = "Feed"
 
         binding.appBarHome.iconNotificacao.setOnClickListener {
@@ -82,9 +90,32 @@ class FeedActivity : AppCompatActivity() {
             startActivity(Intent(this, ReportActivity::class.java))
         }
 
-        binding.endBar.iconFeed.setOnClickListener {
-        }
+        binding.endBar.iconFeed.setOnClickListener {}
     }
+
+    private fun carregarCidadeDoUsuario() {
+        val uid = auth.currentUser?.uid ?: return
+
+        usersRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                cidadeUsuario = snapshot.child("cidade").getValue(String::class.java) ?: ""
+                cidadeUsuario = normalizarCidade(cidadeUsuario)
+
+                carregarFeed()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@FeedActivity, "Erro ao carregar cidade do usuário", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun normalizarCidade(tx: String?): String {
+        if (tx == null) return ""
+        val norm = Normalizer.normalize(tx, Normalizer.Form.NFD)
+        return norm.replace("[\\p{InCombiningDiacriticalMarks}]".toRegex(), "").lowercase().trim()
+    }
+
 
     private fun carregarFeed() {
         feedRef.addValueEventListener(object : ValueEventListener {
@@ -94,8 +125,14 @@ class FeedActivity : AppCompatActivity() {
                 for (ds in snapshot.children) {
                     val item = ds.getValue(FeedItem::class.java)
                     if (item != null) {
-                        item.id = ds.key
-                        feedList.add(item)
+
+                        val cidadeDenunciaNorm = normalizarCidade(item.cidade)
+
+
+                        if (cidadeDenunciaNorm == cidadeUsuario) {
+                            item.id = ds.key
+                            feedList.add(item)
+                        }
                     }
                 }
 
@@ -112,7 +149,6 @@ class FeedActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun salvarComentario(feedItem: FeedItem, texto: String) {
         val uid = auth.currentUser?.uid ?: return

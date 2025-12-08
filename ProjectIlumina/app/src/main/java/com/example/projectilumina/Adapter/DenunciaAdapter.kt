@@ -27,8 +27,6 @@ class DenunciaAdapter(
         private var tvStatusColor = itemView.findViewById<View>(R.id.tvStatusColor)
         private var tvStatus = itemView.findViewById<TextView>(R.id.tvStatus)
 
-
-
         fun bind(denuncia: Denuncia) {
             tvCidade.text = "Cidade: ${denuncia.cidade}"
             tvBairro.text = "Bairro: ${denuncia.bairro}"
@@ -36,16 +34,15 @@ class DenunciaAdapter(
             tvProblema.text = "Problema: ${denuncia.problema}"
             tvDataHora.text = "Data e Hora: ${denuncia.dataHora}"
             tvDescricao.text = "Descrição: ${denuncia.descricao}"
-            tvStatus.text = "${denuncia.status}"
-            val statusColor = when (denuncia.status) {
-                "Em Andamento" -> ContextCompat.getColor(tvStatus.context, R.color.blue)
-                "Finalizado" -> ContextCompat.getColor(tvStatus.context, R.color.greenStatus)
-                else -> ContextCompat.getColor(tvStatus.context, R.color.red)
+            tvStatus.text = denuncia.status
+            val drawableRes = when (denuncia.status.trim().lowercase()) {
+                "Pendente" -> R.drawable.rounded_rectangle_red
+                "finalizado" -> R.drawable.rounded_rectangle_green
+                else -> R.drawable.rounded_rectangle_red
             }
-            tvStatusColor.setBackgroundColor(statusColor)
+            tvStatusColor.setBackgroundResource(drawableRes)
 
-
-            if (denuncia.imagemUrl != null) {
+            if (!denuncia.imagemUrl.isNullOrEmpty()) {
                 Glide.with(itemView.context)
                     .load(denuncia.imagemUrl)
                     .placeholder(R.drawable.carregando_img)
@@ -54,11 +51,13 @@ class DenunciaAdapter(
             } else {
                 tvImagem.setImageResource(R.drawable.icon_logo)
             }
+
             itemView.setOnClickListener {
                 onItemClick(denuncia)
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DenunciaViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -72,3 +71,4 @@ class DenunciaAdapter(
 
     override fun getItemCount() = denunciaList.size
 }
+

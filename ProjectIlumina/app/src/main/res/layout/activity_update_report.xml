@@ -46,7 +46,7 @@
                 android:id="@+id/edt_rua"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/rounded_rectangle_yellow"
+                android:background="@drawable/rounded_rectangle_yellow_fra"
                 android:hint="Rua e N°:"
                 android:textColorHint="@color/edittext"
                 android:paddingStart="20dp" />
@@ -61,7 +61,7 @@
                 android:id="@+id/edt_cidade"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/rounded_rectangle_yellow"
+                android:background="@drawable/rounded_rectangle_yellow_fra"
                 android:hint="Cidade:"
                 android:textColorHint="@color/edittext"
                 android:paddingStart="20dp" />
@@ -77,7 +77,7 @@
                 android:id="@+id/edt_bairro"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/rounded_rectangle_yellow"
+                android:background="@drawable/rounded_rectangle_yellow_fra"
                 android:hint="Bairro:"
                 android:textColorHint="@color/edittext"
                 android:paddingStart="20dp" />
@@ -93,7 +93,7 @@
                 android:id="@+id/edt_problema"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
-                android:background="@drawable/rounded_rectangle_yellow"
+                android:background="@drawable/rounded_rectangle_yellow_fra"
                 android:hint="Problema:"
                 android:textColorHint="@color/edittext"
                 android:paddingStart="20dp" />
@@ -109,7 +109,7 @@
                 android:id="@+id/edt_descricao"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:background="@drawable/rounded_rectangle_yellow"
+                android:background="@drawable/rounded_rectangle_yellow_fra"
                 android:hint="Descrição:"
                 android:textColorHint="@color/edittext"
                 android:paddingStart="20dp" />
@@ -127,7 +127,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Deseja enviar email para a prefeitura?"
+                android:text="Deseja enviar email para qual prefeitura?"
                 android:textSize="16sp"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="10dp"
@@ -155,11 +155,11 @@
 
             <Button
                 android:id="@+id/btn_concluir"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:background="@color/green"
+                android:background="@drawable/button_concluir"
                 android:text="Atualizar"
                 android:textColor="@color/white"
                 android:textAllCaps="false" />

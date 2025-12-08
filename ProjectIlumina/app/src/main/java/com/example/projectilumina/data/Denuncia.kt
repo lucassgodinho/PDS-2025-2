@@ -12,7 +12,7 @@ data class Denuncia(
     var imagemUrl: String? = null,
     val userId: String = "",
     var statusColor: String = "",
-    var status: String = "pendente",
+    var status: String = "Pendente",
     var prefeituraDestino: String? = null
 )
 {

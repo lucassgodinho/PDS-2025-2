@@ -402,7 +402,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback{
             .child(denuncia.id)
 
         val updates = mapOf(
-            "status" to "finalizado"
+            "status" to "Finalizado"
         )
 
         denunciaRef.updateChildren(updates)

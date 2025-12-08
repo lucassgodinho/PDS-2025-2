@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectilumina.R
+import com.example.projectilumina.Utils.LoadingDialog
 import com.example.projectilumina.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -30,11 +31,10 @@ class UpdateProfile : AppCompatActivity() {
     private lateinit var database: DatabaseReference
 
     private var imgPerfilUrlAtual: String? = null
-
-
     private var novaImagemUri: Uri? = null
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+    private lateinit var loading: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +42,7 @@ class UpdateProfile : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().getReference("users")
+        loading = LoadingDialog(this)
 
         btnVoltar = findViewById(R.id.buttonLogin)
         edtNome = findViewById(R.id.editTextNome)
@@ -90,15 +91,17 @@ class UpdateProfile : AppCompatActivity() {
             return
         }
 
+
+
         database.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 val user = snapshot.getValue(User::class.java)
 
                 if (user != null) {
                     edtNome.setText(user.nome ?: "")
                     edtCidade.setText(user.cidade ?: "")
                     edtEmail.setText(user.email ?: "")
-
                     imgPerfilUrlAtual = user.imgperfil
                 } else {
                     Toast.makeText(
@@ -110,6 +113,7 @@ class UpdateProfile : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
+
                 Toast.makeText(
                     this@UpdateProfile,
                     "Erro ao carregar dados",
@@ -120,6 +124,7 @@ class UpdateProfile : AppCompatActivity() {
     }
 
     private fun salvarAtualizacoes() {
+        loading.show()
         val usuarioAtual = auth.currentUser
         val uid = usuarioAtual?.uid
 
@@ -136,6 +141,7 @@ class UpdateProfile : AppCompatActivity() {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             return
         }
+
 
 
         if (novaImagemUri != null) {
@@ -167,6 +173,7 @@ class UpdateProfile : AppCompatActivity() {
                 atualizarDadosUsuario(uid, novoNome, novaCidade, novoEmail, novaUrl)
             }
             .addOnFailureListener {
+                loading.hide()
                 Toast.makeText(
                     this,
                     "Erro ao enviar nova foto de perfil",
@@ -194,10 +201,12 @@ class UpdateProfile : AppCompatActivity() {
 
         database.child(uid).updateChildren(updates)
             .addOnSuccessListener {
+                loading.hide()
                 Toast.makeText(this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener {
+                loading.hide()
                 Toast.makeText(this, "Erro ao atualizar perfil", Toast.LENGTH_SHORT).show()
             }
     }

@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="E-mail"
             android:paddingStart="16dp"
             android:textColorHint="@color/edittext"
@@ -62,7 +62,7 @@
             android:id="@+id/editTextNome"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="Nome"
             android:paddingStart="16dp"
             android:layout_marginTop="10dp"
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:paddingStart="8dp" />
 
 
@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="Digite sua cidade"
             android:paddingStart="16dp"
             android:textColorHint="@color/edittext"
@@ -111,7 +111,7 @@
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="Senha"
             android:inputType="textPassword"
             android:paddingStart="16dp"
@@ -127,17 +127,17 @@
             android:textSize="16sp"
             android:textColor="@color/cinza"/>
 
+
         <EditText
             android:id="@+id/editTextConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="Senha"
             android:inputType="textPassword"
             android:paddingStart="16dp"
-            android:layout_marginTop="10dp"
-            android:textColorHint="@color/edittext"/>
-
+            android:textColorHint="@color/edittext" />
 
         <Button
             android:id="@+id/buttonRegister"

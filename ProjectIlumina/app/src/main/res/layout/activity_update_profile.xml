@@ -44,7 +44,7 @@
             android:id="@+id/editTextNome"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="Nome"
             android:paddingStart="16dp"
             android:layout_marginTop="15dp"
@@ -63,7 +63,7 @@
             android:id="@+id/editTextCidade"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="Cidade"
             android:paddingStart="16dp"
             android:layout_marginTop="15dp"
@@ -81,7 +81,7 @@
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@drawable/rounded_rectangle_yellow"
+            android:background="@drawable/rounded_rectangle_yellow_fra"
             android:hint="E-mail"
             android:layout_marginTop="15dp"
             android:paddingStart="16dp"
@@ -101,15 +101,15 @@
 
         <Button
             android:id="@+id/buttonRegister"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="180dp"
-            android:background="@drawable/rounded_rectangle_green"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_concluir"
             android:text="Salvar"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="18sp"
-            android:layout_gravity="right"
             />
 
     </LinearLayout>

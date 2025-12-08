@@ -43,8 +43,8 @@ class ProfileAdapter(
 
         Glide.with(holder.itemView.context)
             .load(perfil.imgperfil)
-            .placeholder(R.drawable.icon_logo)
-            .error(R.drawable.icon_logo)
+            .placeholder(R.drawable.foto_perfil)
+            .error(R.drawable.foto_perfil)
             .into(holder.foto)
 
 

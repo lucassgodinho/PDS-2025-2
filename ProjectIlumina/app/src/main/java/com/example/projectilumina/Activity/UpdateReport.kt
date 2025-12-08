@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectilumina.R
+import com.example.projectilumina.Utils.LoadingDialog
 import com.example.projectilumina.data.Denuncia
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -31,10 +32,10 @@ class UpdateReport : AppCompatActivity() {
     private var denunciaId: String? = null
     private var imagemUrlAtual: String? = null
 
-
     private var novaImagemUri: Uri? = null
-
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+
+    private lateinit var loading: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,8 @@ class UpdateReport : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().getReference("denuncias")
         rootRef = FirebaseDatabase.getInstance().reference
+
+        loading = LoadingDialog(this)
 
         edtRua = findViewById(R.id.edt_rua)
         edtCidade = findViewById(R.id.edt_cidade)
@@ -78,7 +81,6 @@ class UpdateReport : AppCompatActivity() {
         }
     }
 
-
     private fun configurarSelecionadorDeImagem() {
         imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -96,10 +98,15 @@ class UpdateReport : AppCompatActivity() {
     }
 
     private fun carregarDados() {
+
+
+
         database.child(denunciaId!!)
             .addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
+
+
                     val denuncia = snapshot.getValue(Denuncia::class.java)
 
                     if (denuncia != null) {
@@ -118,18 +125,23 @@ class UpdateReport : AppCompatActivity() {
                     }
                 }
 
-                override fun onCancelled(error: DatabaseError) {}
+                override fun onCancelled(error: DatabaseError) {
+
+                }
             })
     }
 
     private fun atualizar() {
+
         val rua = edtRua.text.toString().trim()
         val cidade = edtCidade.text.toString().trim()
         val bairro = edtBairro.text.toString().trim()
         val problema = edtProblema.text.toString().trim()
         val descricao = edtDescricao.text.toString().trim()
 
-        if (rua.isEmpty() || cidade.isEmpty() || bairro.isEmpty() || problema.isEmpty() || descricao.isEmpty()) {
+        if (rua.isEmpty() || cidade.isEmpty() || bairro.isEmpty() ||
+            problema.isEmpty() || descricao.isEmpty()
+        ) {
             Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -138,6 +150,8 @@ class UpdateReport : AppCompatActivity() {
             if (checkTorres.isChecked) "Torres"
             else if (checkCapao.isChecked) "Capão da Canoa"
             else ""
+
+        loading.show()
 
         if (novaImagemUri != null) {
             atualizarComNovaImagem(rua, cidade, bairro, problema, descricao, prefeituraDestino)
@@ -157,6 +171,7 @@ class UpdateReport : AppCompatActivity() {
         val id = denunciaId!!
 
         val updates = mapOf<String, Any?>(
+
             "/denuncias/$id/rua" to rua,
             "/denuncias/$id/cidade" to cidade,
             "/denuncias/$id/bairro" to bairro,
@@ -173,12 +188,15 @@ class UpdateReport : AppCompatActivity() {
 
         rootRef.updateChildren(updates)
             .addOnSuccessListener {
-                Toast.makeText(this, "Denúncia e feed atualizados!", Toast.LENGTH_SHORT).show()
+                loading.hide()
+                Toast.makeText(this, "Denúncia atualizada!", Toast.LENGTH_SHORT).show()
                 finish()
             }
+            .addOnFailureListener {
+                loading.hide()
+                Toast.makeText(this, "Erro ao atualizar!", Toast.LENGTH_SHORT).show()
+            }
     }
-
-
 
     private fun atualizarComNovaImagem(
         rua: String,
@@ -211,7 +229,6 @@ class UpdateReport : AppCompatActivity() {
                     "/denuncias/$id/prefeituraDestino" to prefeituraDestino,
                     "/denuncias/$id/imagemUrl" to novaUrl,
 
-
                     "/feed/$id/cidade" to cidade,
                     "/feed/$id/problema" to problema,
                     "/feed/$id/descricao" to descricao,
@@ -220,11 +237,23 @@ class UpdateReport : AppCompatActivity() {
 
                 rootRef.updateChildren(updates)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "Denúncia e feed atualizados com nova imagem!", Toast.LENGTH_SHORT).show()
+                        loading.hide()
+                        Toast.makeText(
+                            this,
+                            "Denúncia atualizada com nova imagem!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         finish()
                     }
+                    .addOnFailureListener {
+                        loading.hide()
+                        Toast.makeText(this, "Erro ao atualizar denúncia!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+            }
+            .addOnFailureListener {
+                loading.hide()
+                Toast.makeText(this, "Erro ao enviar imagem!", Toast.LENGTH_SHORT).show()
             }
     }
-
-
 }
