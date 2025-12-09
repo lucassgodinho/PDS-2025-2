@@ -294,7 +294,7 @@ class SendReportActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "message/rfc822"
             putExtra(Intent.EXTRA_EMAIL, arrayOf(emailDestino))
-            putExtra(Intent.EXTRA_SUBJECT, "Denúncia de Iluminação Pública - ProjectIlumina")
+            putExtra(Intent.EXTRA_SUBJECT, "Denúncia de Iluminação Pública - Ilumina")
             putExtra(Intent.EXTRA_TEXT, corpoEmail)
         }
 
